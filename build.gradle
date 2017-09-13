@@ -8,6 +8,11 @@ repositories {
 }
 
 subprojects {
+
+    repositories {
+        mavenCentral()
+    }
+
     apply plugin: 'java'
 
     sourceCompatibility = 1.7
@@ -19,10 +24,35 @@ subprojects {
     }
 }
 
+
+project(':slack-domain') {
+
+    dependencies {
+        compile group: 'com.fasterxml.jackson.core',
+                name: 'jackson-annotations',
+                version: "$jacksonVersion"
+    }
+
+}
+
+
 project(':slack-webhook') {
 
     dependencies {
 
+        compile project(':slack-domain')
+
+        compile group: 'org.slf4j',
+                name: 'slf4j-api',
+                version: "$slf4jVersion"
+
+        compile group: 'javax.servlet',
+                name: 'javax.servlet-api',
+                version: "$servletAPIVersion"
+
+        compile group: 'com.fasterxml.jackson.core',
+                name: 'jackson-databind',
+                version: "$jacksonVersion"
     }
 
 }
