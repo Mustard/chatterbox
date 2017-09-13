@@ -11,9 +11,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 )
 @JsonSubTypes({
     @JsonSubTypes.Type(
-            name = "url_verification",
-            value = URLVerificationEvent.class
+            name = "message",
+            value = MessageEvent.class
     )
 })
 public interface Event {
+
 }

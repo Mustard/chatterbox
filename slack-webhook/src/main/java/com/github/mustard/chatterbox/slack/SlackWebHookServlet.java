@@ -1,17 +1,29 @@
 package com.github.mustard.chatterbox.slack;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.mustard.chatterbox.slack.domain.EventContainer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
+import static com.fasterxml.jackson.databind.PropertyNamingStrategy.SNAKE_CASE;
+
 
 public class SlackWebHookServlet extends HttpServlet {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private static final Logger LOG = LoggerFactory.getLogger(SlackWebHookServlet.class);
+
+    private final ObjectMapper objectMapper = new ObjectMapper()
+            .setPropertyNamingStrategy(SNAKE_CASE);
 
     @Override
     protected void doPost(
@@ -19,19 +31,44 @@ public class SlackWebHookServlet extends HttpServlet {
             HttpServletResponse resp
     ) throws ServletException, IOException {
 
-        JsonNode json = objectMapper.readTree(req.getInputStream());
+        EventContainer eventContainer;
 
-        if (json.has("challenge")) {
-            String challenge = json.get("challenge").asText();
-            resp.setStatus(200);
-            resp.setContentType("text/plain");
-            resp.getWriter().write(challenge);
-            return;
+        if (LOG.isDebugEnabled()) {
+            String requestBody = inputStreamToString(req.getInputStream());
+            LOG.debug(requestBody);
+            eventContainer = objectMapper.readValue(requestBody, EventContainer.class);
+        } else {
+            eventContainer = objectMapper.readValue(req.getInputStream(), EventContainer.class);
         }
 
+        switch (eventContainer.type) {
+            case "event_callback":
+                handleEvent(eventContainer, resp);
+            case "url_verification":
+                handleUrlVerification(eventContainer, resp);
+        }
 
+    }
 
-        super.doPost(req, resp);
+    private String inputStreamToString(InputStream inputStream) throws IOException {
+        BufferedInputStream bis = new BufferedInputStream(inputStream);
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        int result = bis.read();
+        while(result != -1) {
+            buf.write((byte) result);
+            result = bis.read();
+        }
+        return buf.toString(StandardCharsets.UTF_8.name());
+    }
+
+    private void handleUrlVerification(EventContainer eventContainer, HttpServletResponse resp) throws IOException {
+        resp.setStatus(200);
+        resp.setContentType("text/plain");
+        resp.getWriter().write(eventContainer.challenge);
+    }
+
+    private void handleEvent(EventContainer eventContainer, HttpServletResponse resp) {
+
     }
 
 }
