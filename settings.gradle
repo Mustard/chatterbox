@@ -2,3 +2,5 @@ rootProject.name = 'chatterbox'
 
 include 'slack-webhook'
 include 'slack-domain'
+
+include 'example'

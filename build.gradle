@@ -7,6 +7,21 @@ repositories {
     mavenCentral()
 }
 
+buildscript {
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+//            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+    }
+}
+
+
+
 subprojects {
 
     repositories {
@@ -27,7 +42,17 @@ subprojects {
 
 project(':slack-domain') {
 
+    compileJava {
+        options.compilerArgs += ["-parameters"]
+    }
+
+
     dependencies {
+
+        compile group: 'com.fasterxml.jackson.module',
+                name: 'jackson-module-parameter-names',
+                version: "$jacksonVersion"
+
         compile group: 'com.fasterxml.jackson.core',
                 name: 'jackson-annotations',
                 version: "$jacksonVersion"
@@ -55,6 +80,36 @@ project(':slack-webhook') {
                 version: "$jacksonVersion"
     }
 
+}
+
+
+project(':example') {
+
+    apply plugin: 'application'
+    apply plugin: 'com.github.johnrengelman.shadow'
+
+    shadowJar {
+        mergeServiceFiles()
+        exclude 'META-INF/*.DSA'
+        exclude 'META-INF/*.RSA'
+//        transform(AppendingTransformer) {
+//            resource = 'META-INF/cxf/bus-extensions.txt'
+//        }
+        // baseName = 'reception-app'
+    }
+
+    mainClassName = 'com.github.mustard.chatterbox.example.ExampleApp'
+
+
+    dependencies {
+
+        compile project(':slack-webhook')
+
+        compile group: 'io.dropwizard',
+                name: 'dropwizard-core',
+                version: "$dropwizardVersion"
+
+    }
 }
 
 
