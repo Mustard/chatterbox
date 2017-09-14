@@ -1,0 +1,19 @@
+{
+  "token": "80Lck2WlmFwzhTk2wFWDTtFT",
+  "team_id": "T72CEE1J6",
+  "api_app_id": "A72CJMJUA",
+  "event": {
+    "type": "message",
+    "user": "U72CEE1PC",
+    "text": "Hi",
+    "ts": "1505386778.000151",
+    "channel": "D72EA72LC",
+    "event_ts": "1505386778.000151"
+  },
+  "type": "event_callback",
+  "authed_users": [
+    "U72CEE1PC"
+  ],
+  "event_id": "Ev731HKKQA",
+  "event_time": 1505386778
+}

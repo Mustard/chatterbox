@@ -1,5 +1,6 @@
 package com.github.mustard.chatterbox.slack;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mustard.chatterbox.slack.domain.EventContainer;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
 import static com.fasterxml.jackson.databind.PropertyNamingStrategy.SNAKE_CASE;
 
 
@@ -23,7 +25,8 @@ public class SlackWebHookServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(SlackWebHookServlet.class);
 
     private final ObjectMapper objectMapper = new ObjectMapper()
-            .setPropertyNamingStrategy(SNAKE_CASE);
+            .setPropertyNamingStrategy(SNAKE_CASE)
+            .disable(FAIL_ON_UNKNOWN_PROPERTIES);
 
     @Override
     protected void doPost(
@@ -44,8 +47,10 @@ public class SlackWebHookServlet extends HttpServlet {
         switch (eventContainer.type) {
             case "event_callback":
                 handleEvent(eventContainer, resp);
+                break;
             case "url_verification":
                 handleUrlVerification(eventContainer, resp);
+                break;
         }
 
     }
@@ -64,6 +69,7 @@ public class SlackWebHookServlet extends HttpServlet {
     private void handleUrlVerification(EventContainer eventContainer, HttpServletResponse resp) throws IOException {
         resp.setStatus(200);
         resp.setContentType("text/plain");
+//        resp.setCharacterEncoding("UTF-8");
         resp.getWriter().write(eventContainer.challenge);
     }
 

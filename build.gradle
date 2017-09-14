@@ -17,8 +17,10 @@ buildscript {
     dependencies {
 //            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
     }
 }
+
 
 
 
@@ -29,14 +31,22 @@ subprojects {
     }
 
     apply plugin: 'java'
+    apply plugin: 'org.junit.platform.gradle.plugin'
 
     sourceCompatibility = 1.7
 
     dependencies {
-        // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-        testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.0.0'
-        // testCompile group: 'junit', name: 'junit', version: '4.12'
+        testCompile group: 'org.junit.jupiter',
+                    name: 'junit-jupiter-api',
+                    version: "$junitVersion"
+
+        testRuntime group: 'org.junit.jupiter',
+                    name: 'junit-jupiter-engine',
+                    version: "$junitVersion"
     }
+
+}
+dependencies {
 }
 
 
@@ -78,6 +88,15 @@ project(':slack-webhook') {
         compile group: 'com.fasterxml.jackson.core',
                 name: 'jackson-databind',
                 version: "$jacksonVersion"
+
+        testCompile group: 'io.dropwizard',
+                name: 'dropwizard-testing',
+                version: "$dropwizardVersion"
+
+        testCompile group: 'org.apache.httpcomponents',
+                    name: 'fluent-hc',
+                    version: "$httpComponentsVersion"
+
     }
 
 }
