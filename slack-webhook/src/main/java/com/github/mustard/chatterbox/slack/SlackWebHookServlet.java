@@ -1,7 +1,7 @@
 package com.github.mustard.chatterbox.slack;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import com.github.mustard.chatterbox.slack.domain.EventContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +25,7 @@ public class SlackWebHookServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(SlackWebHookServlet.class);
 
     private final ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new ParameterNamesModule())
             .setPropertyNamingStrategy(SNAKE_CASE)
             .disable(FAIL_ON_UNKNOWN_PROPERTIES);
 
