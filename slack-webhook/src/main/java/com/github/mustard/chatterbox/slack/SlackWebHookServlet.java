@@ -3,6 +3,7 @@ package com.github.mustard.chatterbox.slack;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import com.github.mustard.chatterbox.slack.domain.EventContainer;
+import com.github.mustard.chatterbox.slack.domain.event.MessageEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +29,12 @@ public class SlackWebHookServlet extends HttpServlet {
             .registerModule(new ParameterNamesModule())
             .setPropertyNamingStrategy(SNAKE_CASE)
             .disable(FAIL_ON_UNKNOWN_PROPERTIES);
+
+    private final SlackEventSink eventSink;
+
+    public SlackWebHookServlet(SlackEventSink eventSink) {
+        this.eventSink = eventSink;
+    }
 
     @Override
     protected void doPost(
@@ -70,12 +77,15 @@ public class SlackWebHookServlet extends HttpServlet {
     private void handleUrlVerification(EventContainer eventContainer, HttpServletResponse resp) throws IOException {
         resp.setStatus(200);
         resp.setContentType("text/plain");
-//        resp.setCharacterEncoding("UTF-8");
         resp.getWriter().write(eventContainer.challenge);
     }
 
     private void handleEvent(EventContainer eventContainer, HttpServletResponse resp) {
-
+        resp.setStatus(200);
+        resp.setContentType("text/plain");
+        if (eventContainer.event instanceof MessageEvent) {
+            eventSink.onMessage((MessageEvent) eventContainer.event);
+        }
     }
 
 }
