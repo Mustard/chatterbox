@@ -1,6 +1,5 @@
 package com.github.mustard.chatterbox.slack.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.mustard.chatterbox.slack.domain.event.Event;
 
 public class EventContainer {
@@ -16,14 +15,8 @@ public class EventContainer {
     public final Integer eventTime;
 
     public EventContainer(
-            @JsonProperty("type") String type,
-            @JsonProperty("token") String token,
-            @JsonProperty("teamId") String teamId,
-            @JsonProperty("apiAppId") String apiAppId,
-            @JsonProperty("eventId") String eventId,
-            @JsonProperty("challenge") String challenge,
-            @JsonProperty("event") Event event,
-            @JsonProperty("eventTime") Integer eventTime
+            String type, String token, String teamId, String apiAppId,
+            String eventId, String challenge, Event event, Integer eventTime
     ) {
         this.type = type;
         this.token = token;
