@@ -27,29 +27,46 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SlackWebHookServletTest {
 
     private Server server;
+    private SlackEventSinkStore eventSink = new SlackEventSinkStore();
 
     @BeforeAll
-    void setUp() throws Exception {
+    void beforeAll() throws Exception {
         server = new Server(0);
         ServletHandler servletHandler = new ServletHandler();
         server.setHandler(servletHandler);
         servletHandler.addServletWithMapping(new ServletHolder(
-                new SlackWebHookServlet()), "/slack-events");
+                new SlackWebHookServlet(eventSink)), "/slack-events");
         server.start();
     }
 
-    @AfterEach
-    void tearDown() throws Exception {
+    @AfterAll
+    void afterAll() throws Exception {
         if (server != null) server.stop();
     }
 
+    @AfterEach
+    void afterEach() {
+        eventSink.clear();
+    }
+
     @Test
-    @DisplayName("URL Verification")
-    void shouldFail() throws IOException {
+    @DisplayName("URL verification should return challenge")
+    void shouldReturnChallenge() throws IOException {
         HttpResponse response = postEvent("url-check.json");
         assertThat(response.getStatusLine().getReasonPhrase()).isEqualTo("OK");
         assertThat(response.getLastHeader(CONTENT_TYPE).getValue()).contains(MediaType.TEXT_PLAIN);
         assertThat(response.getEntity().getContent()).hasSameContentAs(inputStreamFrom("ivBOsffuOApLqxhWskctgdvMPa00Nt1B9Zv8RzTx9ahBVfevfWPZ"));
+    }
+
+    @Test
+    @DisplayName("Receive message")
+    void should() throws IOException {
+        HttpResponse response = postEvent("message.json");
+        assertThat(response.getStatusLine().getReasonPhrase()).isEqualTo("OK");
+        assertThat(response.getLastHeader(CONTENT_TYPE).getValue()).contains(MediaType.TEXT_PLAIN);
+        assertThat(eventSink.messages.get(0).text).isEqualTo("Hi");
+        assertThat(eventSink.messages.get(0).channel).isEqualTo("D72EA72LC");
+        assertThat(eventSink.messages.get(0).user).isEqualTo("U72CEE1PC");
     }
 
     private int getPort() {
