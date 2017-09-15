@@ -10,12 +10,9 @@ public class ExampleApp extends Application<Config> {
         new ExampleApp().run(args);
     }
 
-    // API Token
-    // xoxb-240349962339-ZYa1npaeSiLJab8fxwB4vHzq
-
     @Override
     public void run(Config conf, Environment env) throws Exception {
-        env.servlets().addServlet("SlackServlet", new SlackWebHookServlet())
+        env.servlets().addServlet("SlackServlet", new SlackWebHookServlet(new LoggingSlackEventSink()))
                 .addMapping("/slack-events");
     }
 
