@@ -4,6 +4,7 @@ version '1.0-SNAPSHOT'
 //apply plugin: 'java'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -27,7 +28,10 @@ buildscript {
 subprojects {
 
     repositories {
+        mavenLocal()
         mavenCentral()
+        jcenter()
+        maven { url "https://palantir.bintray.com/releases" }
     }
 
     apply plugin: 'java'
@@ -96,6 +100,19 @@ project(':slack-webhook') {
         testCompile group: 'org.apache.httpcomponents',
                     name: 'fluent-hc',
                     version: "$httpComponentsVersion"
+
+    }
+
+}
+
+
+project(':slack-client') {
+
+    dependencies {
+
+        compile project(':slack-domain')
+
+        compile "com.palantir.roboslack:roboslack-webhook:1.2.0"
 
     }
 
