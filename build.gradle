@@ -60,7 +60,6 @@ project(':slack-domain') {
         options.compilerArgs += ["-parameters"]
     }
 
-
     dependencies {
 
         compile group: 'com.fasterxml.jackson.module',
@@ -73,6 +72,7 @@ project(':slack-domain') {
     }
 
 }
+
 
 
 project(':slack-webhook') {
@@ -114,6 +114,19 @@ project(':slack-client') {
 
         compile "com.palantir.roboslack:roboslack-webhook:1.2.0"
 
+    }
+
+}
+
+project('slack-dropwizard') {
+
+    dependencies {
+
+        compile project(':slack-webhook')
+
+        compile group: 'io.dropwizard',
+                name: 'dropwizard-core',
+                version: "$dropwizardVersion"
     }
 
 }

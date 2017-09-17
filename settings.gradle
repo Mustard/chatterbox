@@ -3,5 +3,6 @@ rootProject.name = 'chatterbox'
 include 'slack-domain'
 include 'slack-client'
 include 'slack-webhook'
+include 'slack-dropwizard'
 
 include 'example'
