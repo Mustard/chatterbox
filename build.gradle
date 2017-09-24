@@ -1,12 +1,12 @@
+
 group 'com.github.mustard'
 version '1.0-SNAPSHOT'
-
-//apply plugin: 'java'
 
 repositories {
     mavenLocal()
     mavenCentral()
 }
+
 
 buildscript {
 
@@ -19,10 +19,9 @@ buildscript {
 //            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
+        classpath 'com.github.ben-manes:gradle-versions-plugin:0.15.0'
     }
 }
-
-
 
 
 subprojects {
@@ -36,6 +35,7 @@ subprojects {
 
     apply plugin: 'java'
     apply plugin: 'org.junit.platform.gradle.plugin'
+    apply plugin: 'com.github.ben-manes.versions'
 
     sourceCompatibility = 1.7
 
