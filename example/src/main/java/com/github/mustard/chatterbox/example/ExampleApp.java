@@ -1,7 +1,8 @@
 package com.github.mustard.chatterbox.example;
 
-import com.github.mustard.chatterbox.slack.SlackWebHookServlet;
+import com.github.mustard.chatterbox.slack.dropwizard.ChatterboxSlackBundle;
 import io.dropwizard.Application;
+import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
 public class ExampleApp extends Application<Config> {
@@ -12,8 +13,11 @@ public class ExampleApp extends Application<Config> {
 
     @Override
     public void run(Config conf, Environment env) throws Exception {
-        env.servlets().addServlet("SlackServlet", new SlackWebHookServlet(new LoggingSlackEventSink()))
-                .addMapping("/slack-events");
+    }
+
+    @Override
+    public void initialize(Bootstrap<Config> bootstrap) {
+        bootstrap.addBundle(new ChatterboxSlackBundle(new LoggingSlackEventSink()));
     }
 
 }

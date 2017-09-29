@@ -151,7 +151,7 @@ project(':example') {
 
     dependencies {
 
-        compile project(':slack-webhook')
+        compile project(':slack-dropwizard')
 
         compile group: 'io.dropwizard',
                 name: 'dropwizard-core',
