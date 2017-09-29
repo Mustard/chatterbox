@@ -9,4 +9,7 @@ Easily build chat bots for Slack and other messaging platforms (coming soon)
 
 #### Modules
 
-`slack-webhook` 
+`slack-webhook` Servlet to recieve Slack HTTP events (what slack calles outgoing webhooks)
+`slack-domain` Domain objects (DTOs) for Slack
+`slack-dropwizard` Dropwizard bundle to register all Slack servlets
+
