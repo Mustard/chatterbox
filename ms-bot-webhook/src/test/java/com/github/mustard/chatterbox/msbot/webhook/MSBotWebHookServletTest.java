@@ -49,12 +49,11 @@ class MSBotWebHookServletTest {
     }
 
     @Test
-    @DisplayName("URL verification should return challenge")
+    @DisplayName("Should handle text message")
     void shouldReturnChallenge() throws IOException {
         HttpResponse response = postEvent("message-hi.json");
         assertThat(response.getStatusLine().getReasonPhrase()).isEqualTo("OK");
-//        assertThat(response.getLastHeader(CONTENT_TYPE).getValue()).contains(MediaType.TEXT_PLAIN);
-//        assertThat(response.getEntity().getContent()).hasSameContentAs(inputStreamFrom("ivBOsffuOApLqxhWskctgdvMPa00Nt1B9Zv8RzTx9ahBVfevfWPZ"));
+        assertThat(response.getLastHeader(CONTENT_TYPE).getValue()).contains(MediaType.TEXT_PLAIN);
     }
 
     private int getPort() {

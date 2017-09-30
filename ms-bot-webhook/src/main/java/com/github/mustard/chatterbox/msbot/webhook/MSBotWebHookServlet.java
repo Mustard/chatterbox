@@ -22,6 +22,7 @@ public class MSBotWebHookServlet extends HttpServlet {
         String requestBody = inputStreamToString(req.getInputStream());
         LOG.info("MS BOT request {}", requestBody);
         resp.setStatus(200);
+        resp.setContentType("text/plain");
     }
 
     private String inputStreamToString(InputStream inputStream) throws IOException {
