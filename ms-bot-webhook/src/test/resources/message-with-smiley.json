@@ -1,0 +1,29 @@
+{
+  "text": "(cool)",
+  "type": "message",
+  "timestamp": "2017-09-30T12:51:29.436Z",
+  "id": "1506775889450",
+  "channelId": "skype",
+  "serviceUrl": "https://smba.trafficmanager.net/apis/",
+  "from": {
+    "id": "29:1B0Y_Hp9bSr0_KRTEjxOUmSJVVdEGWq_AH5zlaGa-301_K-zX4rsC4Aa4KFpGFbTx",
+    "name": "Guest"
+  },
+  "conversation": {
+    "id": "29:1B0Y_Hp9bSr0_KRTEjxOUmSJVVdEGWq_AH5zlaGa-301_K-zX4rsC4Aa4KFpGFbTx"
+  },
+  "recipient": {
+    "id": "28:1b7056ec-f2fe-437b-b9af-69adf54bb604",
+    "name": "StopIn"
+  },
+  "entities": [
+    {
+      "locale": "en-US",
+      "platform": "Test",
+      "type": "clientInfo"
+    }
+  ],
+  "channelData": {
+    "text": "<ss type=\"cool\">(cool)</ss>"
+  }
+}

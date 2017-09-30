@@ -19,3 +19,12 @@ Domain objects (DTOs) for Slack
 `slack-dropwizard` 
 Dropwizard bundle to register all Slack servlets
 
+
+
+## MS Bot Framework
+
+Register here
+
+https://dev.botframework.com/bots/new
+
+Choose existing bot

@@ -54,9 +54,36 @@ subprojects {
     }
 
 }
-dependencies {
-}
 
+project(':ms-bot-webhook') {
+
+    dependencies {
+
+        compile project(':slack-domain')
+
+        compile group: 'org.slf4j',
+                name: 'slf4j-api',
+                version: "$slf4jVersion"
+
+        compile group: 'javax.servlet',
+                name: 'javax.servlet-api',
+                version: "$servletAPIVersion"
+
+        compile group: 'com.fasterxml.jackson.core',
+                name: 'jackson-databind',
+                version: "$jacksonVersion"
+
+        testCompile group: 'io.dropwizard',
+                name: 'dropwizard-testing',
+                version: "$dropwizardVersion"
+
+        testCompile group: 'org.apache.httpcomponents',
+                name: 'fluent-hc',
+                version: "$httpComponentsVersion"
+
+    }
+
+}
 
 project(':slack-domain') {
 
@@ -157,6 +184,7 @@ project(':example') {
     dependencies {
 
         compile project(':slack-dropwizard')
+        compile project(':ms-bot-webhook')
 
         compile group: 'io.dropwizard',
                 name: 'dropwizard-core',
@@ -166,6 +194,7 @@ project(':example') {
 }
 
 configure([
+        project(':ms-bot-webhook'),
         project(':slack-domain'),
         project(':slack-webhook'),
         project(':slack-dropwizard')

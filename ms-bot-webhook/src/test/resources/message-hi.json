@@ -1,0 +1,28 @@
+{
+  "text": "hi",
+  "type": "message",
+  "timestamp": "2017-09-30T12:47:45.927Z",
+  "id": "1506775665730",
+  "channelId": "skype",
+  "serviceUrl": "https://smba.trafficmanager.net/apis/",
+  "from": {
+    "id": "29:1B0Y_Hp9bSr0_KRTEjxOUmSJVVdEGWq_AH5zlaGa-301_K-zX4rsC4Aa4KFpGFbTx"
+  },
+  "conversation": {
+    "id": "29:1B0Y_Hp9bSr0_KRTEjxOUmSJVVdEGWq_AH5zlaGa-301_K-zX4rsC4Aa4KFpGFbTx"
+  },
+  "recipient": {
+    "id": "28:1b7056ec-f2fe-437b-b9af-69adf54bb604",
+    "name": "StopIn"
+  },
+  "entities": [
+    {
+      "locale": "en-US",
+      "platform": "Test",
+      "type": "clientInfo"
+    }
+  ],
+  "channelData": {
+    "text": "hi"
+  }
+}

@@ -1,5 +1,6 @@
 package com.github.mustard.chatterbox.example;
 
+import com.github.mustard.chatterbox.msbot.webhook.MSBotWebHookServlet;
 import com.github.mustard.chatterbox.slack.dropwizard.ChatterboxSlackBundle;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -13,6 +14,10 @@ public class ExampleApp extends Application<Config> {
 
     @Override
     public void run(Config conf, Environment env) throws Exception {
+
+        env.servlets().addServlet("SlackServlet", new MSBotWebHookServlet())
+                .addMapping("/ms-bot-events");
+
     }
 
     @Override
