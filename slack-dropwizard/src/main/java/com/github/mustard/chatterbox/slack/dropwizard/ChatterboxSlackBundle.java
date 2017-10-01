@@ -16,7 +16,6 @@ public class ChatterboxSlackBundle implements Bundle {
 
     @Override
     public void initialize(Bootstrap<?> bootstrap) {
-
     }
 
     @Override

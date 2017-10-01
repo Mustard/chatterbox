@@ -1,5 +1,6 @@
 rootProject.name = 'chatterbox'
 
+include 'ms-bot-domain'
 include 'ms-bot-webhook'
 
 include 'slack-domain'

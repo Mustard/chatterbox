@@ -8,7 +8,6 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.junit.Ignore;
 import org.junit.jupiter.api.*;
 
 import javax.ws.rs.core.MediaType;
@@ -20,7 +19,6 @@ import static com.google.common.base.Charsets.UTF_8;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("MS Bot Web Hook Servlet")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -34,7 +32,7 @@ class MSBotWebHookServletTest {
         ServletHandler servletHandler = new ServletHandler();
         server.setHandler(servletHandler);
         servletHandler.addServletWithMapping(new ServletHolder(
-                new MSBotWebHookServlet()), "/ms-bot-events");
+                new MSBotWebHookServlet(eventSink)), "/ms-bot-events");
         server.start();
     }
 

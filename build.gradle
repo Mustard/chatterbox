@@ -55,11 +55,27 @@ subprojects {
 
 }
 
+
+project(':ms-bot-domain') {
+
+    compileJava {
+        options.compilerArgs += ["-parameters"]
+    }
+
+    dependencies {
+
+        compile group: 'com.fasterxml.jackson.core',
+                name: 'jackson-annotations',
+                version: "$jacksonVersion"
+    }
+
+}
+
 project(':ms-bot-webhook') {
 
     dependencies {
 
-        compile project(':slack-domain')
+        compile project(':ms-bot-domain')
 
         compile group: 'org.slf4j',
                 name: 'slf4j-api',
@@ -71,6 +87,10 @@ project(':ms-bot-webhook') {
 
         compile group: 'com.fasterxml.jackson.core',
                 name: 'jackson-databind',
+                version: "$jacksonVersion"
+
+        compile group: 'com.fasterxml.jackson.module',
+                name: 'jackson-module-parameter-names',
                 version: "$jacksonVersion"
 
         testCompile group: 'io.dropwizard',
@@ -92,10 +112,6 @@ project(':slack-domain') {
     }
 
     dependencies {
-
-        compile group: 'com.fasterxml.jackson.module',
-                name: 'jackson-module-parameter-names',
-                version: "$jacksonVersion"
 
         compile group: 'com.fasterxml.jackson.core',
                 name: 'jackson-annotations',
@@ -122,6 +138,10 @@ project(':slack-webhook') {
 
         compile group: 'com.fasterxml.jackson.core',
                 name: 'jackson-databind',
+                version: "$jacksonVersion"
+
+        compile group: 'com.fasterxml.jackson.module',
+                name: 'jackson-module-parameter-names',
                 version: "$jacksonVersion"
 
         testCompile group: 'io.dropwizard',
