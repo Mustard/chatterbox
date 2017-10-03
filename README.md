@@ -9,12 +9,11 @@ Easily build chat bots for Slack and other messaging platforms (coming soon)
 
 #### Modules
 
+`slack-domain` 
+Domain objects (DTOs) for Slack
 
 `slack-webhook` 
 Servlet to recieve Slack HTTP events (what slack calles outgoing webhooks)
-
-`slack-domain` 
-Domain objects (DTOs) for Slack
 
 `slack-dropwizard` 
 Dropwizard bundle to register all Slack servlets
@@ -28,3 +27,11 @@ Register here
 https://dev.botframework.com/bots/new
 
 Choose existing bot
+
+#### Modules
+
+`ms-bot-domain`
+Domain objects (DTOs) for the MS Bot Framework
+
+`ms-bot-webhook`
+Servlet to recieve MS Bot Framework events
