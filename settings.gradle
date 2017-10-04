@@ -1,11 +1,11 @@
 rootProject.name = 'chatterbox'
 
-include 'ms-bot-domain'
-include 'ms-bot-webhook'
+include 'ms-bot:ms-bot-domain'
+include 'ms-bot:ms-bot-webhook'
 
-include 'slack-domain'
-include 'slack-client'
-include 'slack-webhook'
-include 'slack-dropwizard'
+include 'slack:slack-domain'
+include 'slack:slack-client'
+include 'slack:slack-webhook'
+include 'slack:slack-dropwizard'
 
 include 'example'

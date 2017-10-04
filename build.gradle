@@ -55,7 +55,7 @@ subprojects {
 }
 
 
-project(':ms-bot-domain') {
+project('ms-bot:ms-bot-domain') {
 
 //    apply from: '../gradle/maven-publish.gradle'
 
@@ -72,11 +72,11 @@ project(':ms-bot-domain') {
 
 }
 
-project(':ms-bot-webhook') {
+project('ms-bot:ms-bot-webhook') {
 
     dependencies {
 
-        compile project(':ms-bot-domain')
+        compile project(':ms-bot:ms-bot-domain')
 
         compile group: 'org.slf4j',
                 name: 'slf4j-api',
@@ -106,7 +106,7 @@ project(':ms-bot-webhook') {
 
 }
 
-project(':slack-domain') {
+project('slack:slack-domain') {
 
 //    apply from: '../gradle/maven-publish.gradle'
 
@@ -125,11 +125,11 @@ project(':slack-domain') {
 
 
 
-project(':slack-webhook') {
+project('slack:slack-webhook') {
 
     dependencies {
 
-        compile project(':slack-domain')
+        compile project(':slack:slack-domain')
 
         compile group: 'org.slf4j',
                 name: 'slf4j-api',
@@ -160,11 +160,11 @@ project(':slack-webhook') {
 }
 
 
-project(':slack-client') {
+project('slack:slack-client') {
 
     dependencies {
 
-        compile project(':slack-domain')
+        compile project(':slack:slack-domain')
 
         compile "com.palantir.roboslack:roboslack-webhook:1.2.0"
 
@@ -172,11 +172,11 @@ project(':slack-client') {
 
 }
 
-project('slack-dropwizard') {
+project('slack:slack-dropwizard') {
 
     dependencies {
 
-        compile project(':slack-webhook')
+        compile project(':slack:slack-webhook')
 
         compile group: 'io.dropwizard',
                 name: 'dropwizard-core',
@@ -186,7 +186,7 @@ project('slack-dropwizard') {
 }
 
 
-project(':example') {
+project('example') {
 
     apply plugin: 'application'
     apply plugin: 'com.github.johnrengelman.shadow'
@@ -206,8 +206,8 @@ project(':example') {
 
     dependencies {
 
-        compile project(':slack-dropwizard')
-        compile project(':ms-bot-webhook')
+        compile project(':slack:slack-dropwizard')
+        compile project(':ms-bot:ms-bot-webhook')
 
         compile group: 'io.dropwizard',
                 name: 'dropwizard-core',
@@ -217,10 +217,10 @@ project(':example') {
 }
 
 configure([
-        project(':ms-bot-webhook'),
-        project(':slack-domain'),
-        project(':slack-webhook'),
-        project(':slack-dropwizard')
+        project(':ms-bot:ms-bot-webhook'),
+        project(':slack:slack-domain'),
+        project(':slack:slack-webhook'),
+        project(':slack:slack-dropwizard')
 ]) {
 
     apply plugin: 'java'
