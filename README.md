@@ -22,6 +22,10 @@ Dropwizard bundle to register all Slack servlets
 
 ## MS Bot Framework
 
+The [MS Bot Framework](https://dev.botframework.com/) supports many chat platforms 
+what it calls [channels](https://docs.microsoft.com/en-us/bot-framework/portal-configure-channels)
+
+
 Register here
 
 https://dev.botframework.com/bots/new
