@@ -72,6 +72,20 @@ project('ms-bot:ms-bot-domain') {
 
 }
 
+project('ms-bot:ms-bot-dropwizard') {
+
+    dependencies {
+
+        compile project(':ms-bot:ms-bot-webhook')
+
+        compile group: 'io.dropwizard',
+                name: 'dropwizard-core',
+                version: "$dropwizardVersion"
+
+    }
+
+}
+
 project('ms-bot:ms-bot-webhook') {
 
     dependencies {
@@ -207,7 +221,7 @@ project('example') {
     dependencies {
 
         compile project(':slack:slack-dropwizard')
-        compile project(':ms-bot:ms-bot-webhook')
+        compile project(':ms-bot:ms-bot-dropwizard')
 
         compile group: 'io.dropwizard',
                 name: 'dropwizard-core',
