@@ -63,6 +63,12 @@ project('ms-bot:ms-bot-client') {
         compile group: 'org.glassfish.jersey.core',
                 name: 'jersey-client',
                 version: "$jerseyClientVersion"
+
+        testCompile group: 'com.github.tomakehurst',
+                    name: 'wiremock',
+                    version: "$wireMockVersion" //,
+//                    ext: 'pom'
+
     }
 }
 
