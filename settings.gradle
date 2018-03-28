@@ -1,5 +1,6 @@
 rootProject.name = 'chatterbox'
 
+include 'ms-bot:ms-bot-client'
 include 'ms-bot:ms-bot-domain'
 include 'ms-bot:ms-bot-dropwizard'
 include 'ms-bot:ms-bot-webhook'

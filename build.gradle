@@ -55,6 +55,17 @@ subprojects {
 }
 
 
+project('ms-bot:ms-bot-client') {
+    dependencies {
+
+        compile project(':ms-bot:ms-bot-domain')
+
+        compile group: 'org.glassfish.jersey.core',
+                name: 'jersey-client',
+                version: "$jerseyClientVersion"
+    }
+}
+
 project('ms-bot:ms-bot-domain') {
 
 //    apply from: '../gradle/maven-publish.gradle'
