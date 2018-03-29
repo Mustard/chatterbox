@@ -1,0 +1,38 @@
+{
+  "type": "message",
+  "id": "83c13aa79f4a46d59ac79cbdfb918080|0000000",
+  "timestamp": "2018-03-29T03:14:06.7553456Z",
+  "serviceUrl": "https://webchat.botframework.com/",
+  "channelId": "webchat",
+  "from": {
+    "id": "AfoFEyBFBCK",
+    "name": "You"
+  },
+  "conversation": {
+    "id": "83c13aa79f4a46d59ac79cbdfb918080"
+  },
+  "recipient": {
+    "id": "StopInDev@JTDhlDjaA4I",
+    "name": "StopInDev"
+  },
+  "locale": "en",
+  "attachments": [
+    {
+      "contentType": "image/png",
+      "contentUrl": "https://webchat.botframework.com/attachments/83c13aa79f4a46d59ac79cbdfb918080/0000000/0/error.PNG?t=JTDhlDjaA4I.dAA.OAAzAGMAMQAzAGEAYQA3ADkAZgA0AGEANAA2AGQANQA5AGEAYwA3ADkAYwBiAGQAZgBiADkAMQA4ADAAOAAwAC0AMAAwADAAMAAwADAAMAA.Gw4zMRDH0wE.KPTkxxc_Q1s.gw2DqvsaoLOMLH3vXAtd9q7OsqitfZo6llK4zalL3EA",
+      "name": "error.PNG"
+    }
+  ],
+  "entities": [
+    {
+      "type": "ClientCapabilities",
+      "requiresBotState": true,
+      "supportsTts": true,
+      "supportsListening": true
+    }
+  ],
+  "channelData": {
+    "clientActivityId": "1522293168468.0397862213149176.0"
+  }
+}
+

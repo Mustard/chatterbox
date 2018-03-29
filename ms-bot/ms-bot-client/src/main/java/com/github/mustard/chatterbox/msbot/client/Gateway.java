@@ -1,14 +1,14 @@
 package com.github.mustard.chatterbox.msbot.client;
 
-import com.github.mustard.chatterbox.msbot.domain.Activity;
-import com.github.mustard.chatterbox.msbot.domain.Conversation;
-import com.github.mustard.chatterbox.msbot.domain.CreateConversationResponse;
-import com.github.mustard.chatterbox.msbot.domain.MSAAADAuthenticationResponse;
+import com.github.mustard.chatterbox.msbot.domain.*;
 import org.glassfish.jersey.client.JerseyClient;
 import org.glassfish.jersey.client.JerseyClientBuilder;
+import org.glassfish.jersey.jackson.JacksonFeature;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.*;
+
+import static com.github.mustard.chatterbox.msbot.domain.ActivityType.MESSAGE;
 
 public class Gateway {
 
@@ -22,16 +22,21 @@ public class Gateway {
 
     public Gateway(String accessToken) {
         this.accessToken = accessToken;
-        this.jerseyClient = JerseyClientBuilder.createClient();
+        this.jerseyClient = makeClient();
         this.loginURL = DEFAULT_LOGIN_URL;
         this.apiURL = DEFAULT_API_URL;
     }
 
     public Gateway(String accessToken, String loginURL, String apiURL) {
         this.accessToken = accessToken;
-        this.jerseyClient = JerseyClientBuilder.createClient();
+        this.jerseyClient = makeClient(); //JerseyClientBuilder.createClient().register(JacksonJsonProvider.class);
         this.loginURL = loginURL;
         this.apiURL = apiURL;
+    }
+
+    private JerseyClient makeClient() {
+        return JerseyClientBuilder.createClient()
+                .register(JacksonFeature.class);
     }
 
     // https://docs.microsoft.com/en-us/azure/bot-service/rest-api/bot-framework-rest-connector-authentication#step-1-request-an-access-token-from-the-msaaad-v2-login-service
@@ -43,19 +48,19 @@ public class Gateway {
                 .param("client_secret", appPassword)
                 .param("scope", "https://api.botframework.com/.default");
 
-        Response response = jerseyClient.target(loginURL)
+        return jerseyClient.target(loginURL)
                 .request(MediaType.APPLICATION_FORM_URLENCODED)
-                .post(Entity.form(form));
+                .post(Entity.form(form), MSAAADAuthenticationResponse.class);
 
-        if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
-            return response.readEntity(MSAAADAuthenticationResponse.class);
-        }
+//        if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
+//            return response.readEntity(MSAAADAuthenticationResponse.class);
+//        }
 
-        if (response.getStatusInfo().getFamily() != Response.Status.Family.CLIENT_ERROR) {
-            // TODO throw auth error?
-        }
+//        if (response.getStatusInfo().getFamily() != Response.Status.Family.CLIENT_ERROR) {
+//            // TODO throw auth error?
+//        }
 
-        return null;
+//        return null;
 
     }
 
@@ -69,14 +74,33 @@ public class Gateway {
     }
 
     // https://docs.microsoft.com/en-us/azure/bot-service/rest-api/bot-framework-rest-connector-send-and-receive-messages#send-the-reply
-    public void replyInConversationToActivity(String conversationId, String replyToId, Activity activity) {
-        jerseyClient.target(apiURL)
+    public void replyToMessageActivity(Activity replyToActivity, String text, TextFormat textFormat) {
+
+        if (replyToActivity.type != MESSAGE) {
+            throw new IllegalStateException("Can only reply to activity events with type = \"message\"");
+        }
+
+        ConversationAccount conversationAccount = new ConversationAccount(
+                replyToActivity.conversation.id, replyToActivity.conversation.isGroup, null
+        );
+
+        Activity activity = Activity.ActivityBuilder.anActivity()
+                .type(MESSAGE)
+                .conversation(conversationAccount)
+                .replyToId(replyToActivity.id)
+                .text(text)
+                .textFormat(textFormat)
+                .build();
+
+        Response response = jerseyClient.target(replyToActivity.serviceUrl)
                 .path("/v3/conversations/{conversationId}/activities/{activityId}")
-                .resolveTemplate("conversationId", conversationId)
-                .resolveTemplate("activityId", replyToId)
+                .resolveTemplate("conversationId", replyToActivity.conversation.id)
+                .resolveTemplate("activityId", replyToActivity.id)
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
                 .post(Entity.json(activity));
+
+        System.out.println(response);
     }
 
 }

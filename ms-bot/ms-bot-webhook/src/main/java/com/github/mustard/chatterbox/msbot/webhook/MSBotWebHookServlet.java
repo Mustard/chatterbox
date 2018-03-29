@@ -1,7 +1,5 @@
 package com.github.mustard.chatterbox.msbot.webhook;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,16 +13,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import static com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES;
-
 
 public class MSBotWebHookServlet extends HttpServlet {
 
     private static final Logger LOG = LoggerFactory.getLogger(MSBotWebHookServlet.class);
-
-    private final ObjectMapper objectMapper = new ObjectMapper()
-            .registerModule(new ParameterNamesModule())
-            .disable(FAIL_ON_UNKNOWN_PROPERTIES);
 
     private final MSBotEventSink eventSink;
 
@@ -36,7 +28,9 @@ public class MSBotWebHookServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String requestBody = inputStreamToString(req.getInputStream());
 
-        LOG.info("MS BOT request {}", requestBody);
+        LOG.info("AUTH HEADER {}", req.getHeader("Authorization"));
+
+        LOG.info("MS BOT request \n\n\n{}\n\n\n", requestBody);
         resp.setStatus(200);
         resp.setContentType("text/plain");
 

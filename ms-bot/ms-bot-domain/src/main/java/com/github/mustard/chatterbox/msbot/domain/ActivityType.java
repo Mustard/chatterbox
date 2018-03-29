@@ -1,13 +1,15 @@
 package com.github.mustard.chatterbox.msbot.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public enum ActivityType {
 
-    MESSAGE,
-    CONVERSATION_UPDATE,
-    CONTACT_RELATION_UPDATE,
-    TYPING,
-    PING,
-    DELETE_USER_DATA,
-    END_OF_CONVERSATION
+    @JsonProperty("message") MESSAGE,
+    @JsonProperty("conversationUpdate") CONVERSATION_UPDATE,
+    @JsonProperty("contactRelationUpdate") CONTACT_RELATION_UPDATE,
+    @JsonProperty("typing") TYPING,
+    @JsonProperty("ping") PING,
+    @JsonProperty("deleteUserData") DELETE_USER_DATA,
+    @JsonProperty("endOfConversation") END_OF_CONVERSATION
 
 }

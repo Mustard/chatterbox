@@ -1,0 +1,24 @@
+{
+  "type": "message",
+  "id": "5c93e306d8874bac85d8d02d08a7d917|0000001",
+  "timestamp": "2018-03-29T03:11:36.4708418Z",
+  "serviceUrl": "https://webchat.botframework.com/",
+  "channelId": "webchat",
+  "from": {
+    "id": "AfoFEyBFBCK",
+    "name": "You"
+  },
+  "conversation": {
+    "id": "5c93e306d8874bac85d8d02d08a7d917"
+  },
+  "recipient": {
+    "id": "StopInDev@JTDhlDjaA4I",
+    "name": "StopInDev"
+  },
+  "textFormat": "plain",
+  "locale": "en",
+  "text": "Hi Dan",
+  "channelData": {
+    "clientActivityId": "1522293023090.21303152434389983.2"
+  }
+}

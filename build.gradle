@@ -36,12 +36,16 @@ subprojects {
     apply plugin: 'org.junit.platform.gradle.plugin'
     apply plugin: 'com.github.ben-manes.versions'
 
-    sourceCompatibility = 1.7
+    sourceCompatibility = 1.8
 
     dependencies {
         testCompile group: 'org.junit.jupiter',
                     name: 'junit-jupiter-api',
                     version: "$junitVersion"
+
+        testCompile group: 'org.junit.jupiter',
+                name: 'junit-jupiter-params',
+                version: "$junitVersion"
 
         testRuntime group: 'org.junit.jupiter',
                     name: 'junit-jupiter-engine',
@@ -64,6 +68,14 @@ project('ms-bot:ms-bot-client') {
                 name: 'jersey-client',
                 version: "$jerseyClientVersion"
 
+        compile group: 'org.glassfish.jersey.media',
+                name: 'jersey-media-json-jackson',
+                version: "$jerseyClientVersion"
+
+        testCompile group: 'io.dropwizard',
+                    name: 'dropwizard-testing',
+                    version: "$dropwizardVersion"
+
         testCompile group: 'com.github.tomakehurst',
                     name: 'wiremock',
                     version: "$wireMockVersion" //,
@@ -74,7 +86,7 @@ project('ms-bot:ms-bot-client') {
 
 project('ms-bot:ms-bot-domain') {
 
-//    apply from: '../gradle/maven-publish.gradle'
+//    apply from: '../gradle/maven-publish.gradle'p
 
     compileJava {
         options.compilerArgs += ["-parameters"]
@@ -85,6 +97,23 @@ project('ms-bot:ms-bot-domain') {
         compile group: 'com.fasterxml.jackson.core',
                 name: 'jackson-annotations',
                 version: "$jacksonVersion"
+
+        compile group: 'com.fasterxml.jackson.module',
+                name: 'jackson-module-parameter-names',
+                version: "$jacksonVersion"
+
+        compile group: 'com.fasterxml.jackson.core',
+                name: 'jackson-databind',
+                version: "$jacksonVersion"
+
+        testCompile group: 'io.dropwizard',
+                    name: 'dropwizard-testing',
+                    version: "$dropwizardVersion"
+
+        testCompile group: 'org.skyscreamer',
+                    name: 'jsonassert',
+                    version: "$jsonAssertVersion"
+
     }
 
 }
@@ -116,14 +145,6 @@ project('ms-bot:ms-bot-webhook') {
         compile group: 'javax.servlet',
                 name: 'javax.servlet-api',
                 version: "$servletAPIVersion"
-
-        compile group: 'com.fasterxml.jackson.core',
-                name: 'jackson-databind',
-                version: "$jacksonVersion"
-
-        compile group: 'com.fasterxml.jackson.module',
-                name: 'jackson-module-parameter-names',
-                version: "$jacksonVersion"
 
         testCompile group: 'io.dropwizard',
                 name: 'dropwizard-testing',
@@ -239,9 +260,14 @@ project('example') {
 
         compile project(':slack:slack-dropwizard')
         compile project(':ms-bot:ms-bot-dropwizard')
+        compile project(':ms-bot:ms-bot-client')
 
         compile group: 'io.dropwizard',
                 name: 'dropwizard-core',
+                version: "$dropwizardVersion"
+
+        compile group: 'io.dropwizard',
+                name: 'dropwizard-client',
                 version: "$dropwizardVersion"
 
     }

@@ -1,0 +1,23 @@
+{
+  "type": "conversationUpdate",
+  "id": "AEqP5d8On5I",
+  "timestamp": "2018-03-29T03:12:49.126032Z",
+  "serviceUrl": "https://webchat.botframework.com/",
+  "channelId": "webchat",
+  "from": {
+    "id": "83c13aa79f4a46d59ac79cbdfb918080"
+  },
+  "conversation": {
+    "id": "83c13aa79f4a46d59ac79cbdfb918080"
+  },
+  "recipient": {
+    "id": "StopInDev@JTDhlDjaA4I",
+    "name": "StopInDev"
+  },
+  "membersAdded": [
+    {
+      "id": "StopInDev@JTDhlDjaA4I",
+      "name": "StopInDev"
+    }
+  ]
+}

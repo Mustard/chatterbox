@@ -2,6 +2,8 @@ package com.github.mustard.chatterbox.msbot.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.EnumDeserializer;
 
 import java.util.List;
 
@@ -33,7 +35,7 @@ public class Activity {
     // summary
     public final String text;
     public final TextFormat textFormat;
-    // timestamp
+    public final String timestamp; // TODO temporal type
     public final String topicName;
     public final ActivityType type;
 
@@ -55,6 +57,7 @@ public class Activity {
             @JsonProperty("serviceUrl") String serviceUrl,
             @JsonProperty("text") String text,
             @JsonProperty("textFormat") TextFormat textFormat,
+            @JsonProperty("timestamp") String timestamp,
             @JsonProperty("topicName") String topicName,
             @JsonProperty("type") ActivityType type
     ) {
@@ -73,8 +76,140 @@ public class Activity {
         this.serviceUrl = serviceUrl;
         this.text = text;
         this.textFormat = textFormat;
+        this.timestamp = timestamp;
         this.topicName = topicName;
         this.type = type;
     }
 
+
+    public static final class ActivityBuilder {
+        public String action;
+        public List<Attachment> attachments;
+        public String attachmentLayout; // TODO enum?
+        public String channelId;
+        public ConversationAccount conversation;
+        public String code;
+        public ChannelAccount from;
+        public boolean historyDisclosed;
+        public String id;
+        // inputHint
+        // locale
+        // localTimestamp
+        // membersAdded
+        // membersRemoved
+        // name
+        public ChannelAccount recipient;
+        public ConversationReference relatesTo;
+        public String replyToId;
+        public String serviceUrl;
+        // speak
+        // suggestedActions
+        // summary
+        public String text;
+        public TextFormat textFormat;
+        public String timestamp; // TODO temporal type
+        public String topicName;
+        public ActivityType type;
+
+        private ActivityBuilder() {
+        }
+
+        public static ActivityBuilder anActivity() {
+            return new ActivityBuilder();
+        }
+
+        public ActivityBuilder action(String action) {
+            this.action = action;
+            return this;
+        }
+
+        public ActivityBuilder attachments(List<Attachment> attachments) {
+            this.attachments = attachments;
+            return this;
+        }
+
+        public ActivityBuilder attachmentLayout(String attachmentLayout) {
+            this.attachmentLayout = attachmentLayout;
+            return this;
+        }
+
+        public ActivityBuilder channelId(String channelId) {
+            this.channelId = channelId;
+            return this;
+        }
+
+        public ActivityBuilder conversation(ConversationAccount conversation) {
+            this.conversation = conversation;
+            return this;
+        }
+
+        public ActivityBuilder code(String code) {
+            this.code = code;
+            return this;
+        }
+
+        public ActivityBuilder from(ChannelAccount from) {
+            this.from = from;
+            return this;
+        }
+
+        public ActivityBuilder historyDisclosed(boolean historyDisclosed) {
+            this.historyDisclosed = historyDisclosed;
+            return this;
+        }
+
+        public ActivityBuilder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public ActivityBuilder recipient(ChannelAccount recipient) {
+            this.recipient = recipient;
+            return this;
+        }
+
+        public ActivityBuilder relatesTo(ConversationReference relatesTo) {
+            this.relatesTo = relatesTo;
+            return this;
+        }
+
+        public ActivityBuilder replyToId(String replyToId) {
+            this.replyToId = replyToId;
+            return this;
+        }
+
+        public ActivityBuilder serviceUrl(String serviceUrl) {
+            this.serviceUrl = serviceUrl;
+            return this;
+        }
+
+        public ActivityBuilder text(String text) {
+            this.text = text;
+            return this;
+        }
+
+        public ActivityBuilder textFormat(TextFormat textFormat) {
+            this.textFormat = textFormat;
+            return this;
+        }
+
+        public ActivityBuilder timestamp(String timestamp) {
+            this.timestamp = timestamp;
+            return this;
+        }
+
+        public ActivityBuilder topicName(String topicName) {
+            this.topicName = topicName;
+            return this;
+        }
+
+        public ActivityBuilder type(ActivityType type) {
+            this.type = type;
+            return this;
+        }
+
+        public Activity build() {
+            return new Activity(action, attachments, attachmentLayout, channelId, conversation, code, from, historyDisclosed, id, recipient, relatesTo, replyToId, serviceUrl, text, textFormat, timestamp, topicName, type);
+        }
+    }
 }

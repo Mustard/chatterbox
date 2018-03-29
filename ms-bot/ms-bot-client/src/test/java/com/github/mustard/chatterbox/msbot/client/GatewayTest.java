@@ -3,6 +3,7 @@ package com.github.mustard.chatterbox.msbot.client;
 import com.github.mustard.chatterbox.msbot.domain.MSAAADAuthenticationResponse;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import io.dropwizard.testing.FixtureHelpers;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.jupiter.api.*;
@@ -42,11 +43,17 @@ class GatewayTest {
     @Ignore
     void shouldAuthenticate() {
         stubFor(post(urlEqualTo("/botframework.com/oauth2/v2.0/token"))
-            .willReturn(okJson("{\"foo\": \"bar\"}")));
-//                .withRequestBody()
+            .willReturn(okJson(FixtureHelpers.fixture("fixtures/SuccessfullAuthenticationResponse.json"))));
 
         MSAAADAuthenticationResponse response = gateway.login("APP_ID", "PASSWORD");
 
-        System.out.println(wireMockServer);
+        // TODO assert request was well formed
+        // TODO handle and test auth failer (need to compare to real response)
+
+        assertEquals(response.accessToken, "eyJhbGciOiJIUzI1Ni");
+        assertEquals(response.tokenType, "Bearer");
+        assertEquals(response.expiresIn, 3600L);
+        assertEquals(response.extExpiresIn, 3600L);
     }
+
 }
