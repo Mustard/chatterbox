@@ -19,7 +19,7 @@ public class DeserialiseAndSerialiseParameterisedTest {
 
     private static List<Arguments> fixtures() {
         return new ArrayList<Arguments>() {{
-            add(Arguments.of("Activity.json", Activity.class));
+            add(Arguments.of("fixtures/web-hook-events/Activity.json", Activity.class));
         }};
     }
 
