@@ -16,7 +16,7 @@ class ActivityTest {
 
     @Test
     void shouldDeserialiseActivity() throws IOException {
-        Activity activity = objectMapper.readValue(fixture("Activity.json"), Activity.class);
+        Activity activity = objectMapper.readValue(fixture("fixtures/web-hook-events/Activity.json"), Activity.class);
 
         assertEquals(activity.id, "bf3cc9a2f5de");
         assertNull(activity.action);
