@@ -81,6 +81,9 @@ public class Activity {
         this.type = type;
     }
 
+    public static ActivityBuilder activityBuilder() {
+        return new ActivityBuilder();
+    }
 
     public static final class ActivityBuilder {
         public String action;
@@ -112,10 +115,6 @@ public class Activity {
         public ActivityType type;
 
         private ActivityBuilder() {
-        }
-
-        public static ActivityBuilder anActivity() {
-            return new ActivityBuilder();
         }
 
         public ActivityBuilder action(String action) {

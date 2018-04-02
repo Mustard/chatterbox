@@ -1,6 +1,6 @@
 package com.github.mustard.chatterbox.msbot.client;
 
-import com.github.mustard.chatterbox.msbot.domain.MSAAADAuthenticationResponse;
+import com.github.mustard.chatterbox.msbot.domain.*;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import io.dropwizard.testing.FixtureHelpers;
@@ -43,7 +43,7 @@ class GatewayTest {
     @Ignore
     void shouldAuthenticate() {
         stubFor(post(urlEqualTo("/botframework.com/oauth2/v2.0/token"))
-            .willReturn(okJson(FixtureHelpers.fixture("fixtures/SuccessfullAuthenticationResponse.json"))));
+                .willReturn(okJson(FixtureHelpers.fixture("fixtures/SuccessfullAuthenticationResponse.json"))));
 
         MSAAADAuthenticationResponse response = gateway.login("APP_ID", "PASSWORD");
 
@@ -56,4 +56,22 @@ class GatewayTest {
         assertEquals(response.extExpiresIn, 3600L);
     }
 
+    @Test
+    void shouldReplyToMessageActivity() {
+
+        Activity inbound = Activity.activityBuilder()
+                .type(ActivityType.MESSAGE)
+                .serviceUrl("http://localhost:" + wireMockServer.port())
+                .conversation(ConversationAccount.conversationAccountBuilder()
+                        .id("conversation_id").build())
+                .id("activity_id")
+                .build();
+
+        stubFor(post(urlEqualTo("/v3/conversations/conversation_id/activities/activity_id"))
+                // TODO real captured response
+                .willReturn(okJson(FixtureHelpers.fixture("fixtures/SuccessfullAuthenticationResponse.json"))));
+
+        gateway.replyToMessageActivity(inbound, "Reply Message", TextFormat.PLAIN);
+
+    }
 }

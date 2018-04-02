@@ -84,7 +84,7 @@ public class Gateway {
                 replyToActivity.conversation.id, replyToActivity.conversation.isGroup, null
         );
 
-        Activity activity = Activity.ActivityBuilder.anActivity()
+        Activity activity = Activity.activityBuilder()
                 .type(MESSAGE)
                 .conversation(conversationAccount)
                 .replyToId(replyToActivity.id)
