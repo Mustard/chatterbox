@@ -10,66 +10,33 @@ import javax.ws.rs.core.*;
 
 import static com.github.mustard.chatterbox.msbot.domain.ActivityType.MESSAGE;
 
-public class Gateway {
+public class MSBotClient {
 
-    private static final String DEFAULT_LOGIN_URL = "https://login.microsoftonline.com/botframework.com/oauth2/v2.0/token";
     private static final String DEFAULT_API_URL = "https://smba.trafficmanager.net/apis";
 
-    private final String accessToken;
     private final JerseyClient jerseyClient;
-    private final String loginURL;
     private final String apiURL;
+    private final MSBotAuthSession authSession;
 
-    public Gateway(String accessToken) {
-        this.accessToken = accessToken;
-        this.jerseyClient = makeClient();
-        this.loginURL = DEFAULT_LOGIN_URL;
+    public MSBotClient(MSBotAuthSession authSession) {
+        this.authSession = authSession;
+        this.jerseyClient = MSBotJerseyClientBuilder.makeClient();
         this.apiURL = DEFAULT_API_URL;
     }
 
-    public Gateway(String accessToken, String loginURL, String apiURL) {
-        this.accessToken = accessToken;
-        this.jerseyClient = makeClient(); //JerseyClientBuilder.createClient().register(JacksonJsonProvider.class);
-        this.loginURL = loginURL;
+    public MSBotClient(MSBotAuthSession authSession, String apiURL) {
+        this.authSession = authSession;
+        this.jerseyClient = MSBotJerseyClientBuilder.makeClient(); //JerseyClientBuilder.createClient().register(JacksonJsonProvider.class);
         this.apiURL = apiURL;
     }
 
-    private JerseyClient makeClient() {
-        return JerseyClientBuilder.createClient()
-                .register(JacksonFeature.class);
-    }
-
-    // https://docs.microsoft.com/en-us/azure/bot-service/rest-api/bot-framework-rest-connector-authentication#step-1-request-an-access-token-from-the-msaaad-v2-login-service
-    public MSAAADAuthenticationResponse login(String appId, String appPassword) {
-
-        Form form = new Form()
-                .param("grant_type", "client_credentials")
-                .param("client_id", appId)
-                .param("client_secret", appPassword)
-                .param("scope", "https://api.botframework.com/.default");
-
-        return jerseyClient.target(loginURL)
-                .request(MediaType.APPLICATION_FORM_URLENCODED)
-                .post(Entity.form(form), MSAAADAuthenticationResponse.class);
-
-//        if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
-//            return response.readEntity(MSAAADAuthenticationResponse.class);
-//        }
-
-//        if (response.getStatusInfo().getFamily() != Response.Status.Family.CLIENT_ERROR) {
-//            // TODO throw auth error?
-//        }
-
-//        return null;
-
-    }
 
     // https://docs.microsoft.com/en-us/azure/bot-service/rest-api/bot-framework-rest-connector-send-and-receive-messages#start-a-conversation
     public CreateConversationResponse startConversation(Conversation conversation) {
         return jerseyClient.target(apiURL)
                 .path("/v3/conversations")
                 .request(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + authSession.getBearerAuthToken())
                 .post(Entity.json(conversation), CreateConversationResponse.class);
     }
 
@@ -97,7 +64,7 @@ public class Gateway {
                 .resolveTemplate("conversationId", replyToActivity.conversation.id)
                 .resolveTemplate("activityId", replyToActivity.id)
                 .request(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + authSession.getBearerAuthToken())
                 .post(Entity.json(activity));
 
         System.out.println(response);

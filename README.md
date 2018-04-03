@@ -1,23 +1,21 @@
 
-# chatterbox
+# Chatterbox [![Build Status](https://travis-ci.org/Mustard/chatterbox.svg?branch=master)](https://travis-ci.org/Mustard/chatterbox)
 
-Easily build chat bots for Slack and other messaging platforms (coming soon) 
+Easily build chat bots for Slack, Facebook, Skype and other messaging platforms 
 
-[![Build Status](https://travis-ci.org/Mustard/chatterbox.svg?branch=master)](https://travis-ci.org/Mustard/chatterbox)
+## Getting Started
 
-## Slack
+Chatterbox has been built to work well with [Dropwizard](www.dropwizard.io) however each module is packaged as its own jar with minimal dependencies typically just the servlet api and can therefore be used in other environments   
 
-#### Modules
+To get started with Chatterbox and Dropwizard check out the `example` directory
 
-`slack-domain` 
-Domain objects (DTOs) for Slack
+## Supported Platforms
 
-`slack-webhook` 
-Servlet to recieve Slack HTTP events (what slack calles outgoing webhooks)
-
-`slack-dropwizard` 
-Dropwizard bundle to register all Slack servlets
-
+| Platform | Module | 
+| -------- | -------|
+| Slack    | `slack` |
+| Skype    | `ms-bot` |
+| Facebook | `ms-bot` |
 
 
 ## MS Bot Framework

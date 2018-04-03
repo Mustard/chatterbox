@@ -59,6 +59,12 @@ subprojects {
 }
 
 
+project('util') {
+    dependencies {
+    }
+}
+
+
 project('ms-bot:ms-bot-client') {
     dependencies {
 
@@ -136,6 +142,7 @@ project('ms-bot:ms-bot-webhook') {
 
     dependencies {
 
+        compile project(':util')
         compile project(':ms-bot:ms-bot-domain')
 
         compile group: 'org.slf4j',
@@ -181,6 +188,7 @@ project('slack:slack-webhook') {
 
     dependencies {
 
+        compile project(':util')
         compile project(':slack:slack-domain')
 
         compile group: 'org.slf4j',

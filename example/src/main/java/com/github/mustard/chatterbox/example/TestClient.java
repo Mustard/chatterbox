@@ -1,10 +1,5 @@
 package com.github.mustard.chatterbox.example;
 
-import com.github.mustard.chatterbox.msbot.client.Gateway;
-import com.github.mustard.chatterbox.msbot.domain.*;
-
-import java.util.ArrayList;
-
 public class TestClient {
 
     public static void main(String[] args) {

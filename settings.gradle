@@ -11,3 +11,4 @@ include 'slack:slack-webhook'
 include 'slack:slack-dropwizard'
 
 include 'example'
+include 'util'

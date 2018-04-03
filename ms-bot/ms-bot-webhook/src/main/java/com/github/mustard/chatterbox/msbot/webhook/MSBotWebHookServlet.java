@@ -1,5 +1,10 @@
 package com.github.mustard.chatterbox.msbot.webhook;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.mustard.chatterbox.msbot.MSBotObjectMapperFactory;
+import com.github.mustard.chatterbox.msbot.domain.Activity;
+import com.github.mustard.chatterbox.msbot.domain.MessageEvent;
+import com.github.mustard.chatterbox.util.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,11 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
 
 public class MSBotWebHookServlet extends HttpServlet {
@@ -19,34 +20,32 @@ public class MSBotWebHookServlet extends HttpServlet {
     private static final Logger LOG = LoggerFactory.getLogger(MSBotWebHookServlet.class);
 
     private final MSBotEventSink eventSink;
+    private final ObjectMapper objectMapper;
 
     public MSBotWebHookServlet(MSBotEventSink eventSink) {
         this.eventSink = eventSink;
+        this.objectMapper = MSBotObjectMapperFactory.createObjectMapper();
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String requestBody = inputStreamToString(req.getInputStream());
 
         LOG.info("AUTH HEADER {}", req.getHeader("Authorization"));
 
-        LOG.info("MS BOT request \n\n\n{}\n\n\n", requestBody);
+        Activity activity;
+
+        if (LOG.isDebugEnabled()) {
+            String requestBody = IOUtil.toString(req.getInputStream());
+            LOG.debug(requestBody);
+            activity = objectMapper.readValue(requestBody, Activity.class);
+        } else {
+            activity = objectMapper.readValue(req.getInputStream(), Activity.class);
+        }
+
+        eventSink.onMessage(new MessageEvent()); // TODO
+
         resp.setStatus(200);
         resp.setContentType("text/plain");
-
-//        objectMapper.readreq.getInputStream().
-//        eventSink.
-    }
-
-    private String inputStreamToString(InputStream inputStream) throws IOException {
-        BufferedInputStream bis = new BufferedInputStream(inputStream);
-        ByteArrayOutputStream buf = new ByteArrayOutputStream();
-        int result = bis.read();
-        while(result != -1) {
-            buf.write((byte) result);
-            result = bis.read();
-        }
-        return buf.toString(StandardCharsets.UTF_8.name());
     }
 
 }
