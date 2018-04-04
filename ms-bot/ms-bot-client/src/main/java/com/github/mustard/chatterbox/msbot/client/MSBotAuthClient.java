@@ -40,9 +40,17 @@ public class MSBotAuthClient {
     }
 
     public OpenIDConfiguration fetchOpenIDConfiguration() {
-        return jerseyClient.target(openIDConfigURL)
+        OpenIDConfiguration openIDConfiguration = jerseyClient.target(openIDConfigURL)
                 .request(MediaType.APPLICATION_JSON)
                 .get(OpenIDConfiguration.class);
+
+
+        jerseyClient.target(openIDConfiguration.jwksURI)
+                .request(MediaType.APPLICATION_JSON)
+                .get(String.class);
+
+        // TODO return pair?
+        return openIDConfiguration;
 
     }
 
