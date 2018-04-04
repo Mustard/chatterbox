@@ -10,48 +10,33 @@ import javax.ws.rs.core.MediaType;
 
 public class MSBotAuthClient {
 
-    private static final String DEFAULT_LOGIN_URL = "https://login.microsoftonline.com/botframework.com/oauth2/v2.0/token";
     private static final String DEFAULT_OPENID_CONFIG_URL = "https://login.botframework.com/v1/.well-known/openidconfiguration";
 
     private final JerseyClient jerseyClient;
-    private final String loginURL;
     private final String openIDConfigURL;
 
     public MSBotAuthClient() {
         this.jerseyClient = MSBotJerseyClientBuilder.makeClient();
-        this.loginURL = DEFAULT_LOGIN_URL;
         this.openIDConfigURL = DEFAULT_OPENID_CONFIG_URL;
     }
 
-    public MSBotAuthClient(String loginURL, String openIDConfigURL) {
+    public MSBotAuthClient(String openIDConfigURL) {
         this.jerseyClient = MSBotJerseyClientBuilder.makeClient();
-        this.loginURL = loginURL;
         this.openIDConfigURL = openIDConfigURL;
     }
 
     // https://docs.microsoft.com/en-us/azure/bot-service/rest-api/bot-framework-rest-connector-authentication#step-1-request-an-access-token-from-the-msaaad-v2-login-service
-    public MSAAADAuthenticationResponse login(String appId, String appPassword) {
+    public MSAAADAuthenticationResponse login(String url, MSBotCredentialsProvider credentialsProvider) {
 
         Form form = new Form()
                 .param("grant_type", "client_credentials")
-                .param("client_id", appId)
-                .param("client_secret", appPassword)
+                .param("client_id", credentialsProvider.getAppId())
+                .param("client_secret", credentialsProvider.getAppPassword())
                 .param("scope", "https://api.botframework.com/.default");
 
-        return jerseyClient.target(loginURL)
+        return jerseyClient.target(url)
                 .request(MediaType.APPLICATION_FORM_URLENCODED)
                 .post(Entity.form(form), MSAAADAuthenticationResponse.class);
-
-//        if (response.getStatusInfo().getFamily() == Response.Status.Family.SUCCESSFUL) {
-//            return response.readEntity(MSAAADAuthenticationResponse.class);
-//        }
-
-//        if (response.getStatusInfo().getFamily() != Response.Status.Family.CLIENT_ERROR) {
-//            // TODO throw auth error?
-//        }
-
-//        return null;
-
     }
 
     public OpenIDConfiguration fetchOpenIDConfiguration() {

@@ -42,7 +42,8 @@ public class MSBotWebHookServlet extends HttpServlet {
             activity = objectMapper.readValue(req.getInputStream(), Activity.class);
         }
 
-        eventSink.onMessage(new MessageEvent()); // TODO
+//        eventSink.onMessage(new MessageEvent()); // TODO
+        eventSink.onMessage(activity);
 
         resp.setStatus(200);
         resp.setContentType("text/plain");

@@ -21,7 +21,7 @@ public class ChatterboxMSBotBundle implements Bundle {
 
     @Override
     public void run(Environment env) {
-        env.servlets().addServlet("SlackServlet", new MSBotWebHookServlet(msBoteventSink))
+        env.servlets().addServlet("MSBotServlet", new MSBotWebHookServlet(msBoteventSink))
                 .addMapping("/ms-bot-events");
     }
 

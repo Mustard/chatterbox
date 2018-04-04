@@ -3,10 +3,8 @@ package com.github.mustard.chatterbox.msbot.client;
 import com.github.mustard.chatterbox.msbot.domain.*;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import io.dropwizard.testing.FixtureHelpers;
-import org.junit.Ignore;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 
@@ -26,7 +24,7 @@ class MSBotClientTest {
     @BeforeEach
     void setUp() {
         String wireMockURL = "http://localhost:" + wireMockServer.port();
-        this.client = new MSBotClient(new MSBotAuthSession() {
+        this.client = new MSBotClient(new MSBotAuthTokenProvider() {
             @Override
             public String getBearerAuthToken() {
                 return "ACCESS_TOKEN";

@@ -1,9 +1,11 @@
 package com.github.mustard.chatterbox.msbot.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public enum TextFormat {
 
-    MARKDOWN,
-    PLAIN,
-    XML
+    @JsonProperty("markdown") MARKDOWN,
+    @JsonProperty("plain")PLAIN,
+    @JsonProperty("xml")XML
 
 }

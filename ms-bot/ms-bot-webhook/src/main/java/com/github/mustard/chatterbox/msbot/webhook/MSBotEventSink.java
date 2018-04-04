@@ -1,10 +1,10 @@
 package com.github.mustard.chatterbox.msbot.webhook;
 
 
-import com.github.mustard.chatterbox.msbot.domain.MessageEvent;
+import com.github.mustard.chatterbox.msbot.domain.Activity;
 
 public interface MSBotEventSink {
 
-    void onMessage(MessageEvent message);
+    void onMessage(Activity activity);
 
 }

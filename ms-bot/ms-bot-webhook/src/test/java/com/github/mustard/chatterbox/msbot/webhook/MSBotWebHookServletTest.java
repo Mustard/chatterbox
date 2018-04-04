@@ -1,6 +1,6 @@
 package com.github.mustard.chatterbox.msbot.webhook;
 
-import com.github.mustard.chatterbox.msbot.domain.MessageEvent;
+import com.github.mustard.chatterbox.msbot.domain.Activity;
 import com.google.common.io.Resources;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
@@ -35,7 +35,7 @@ class MSBotWebHookServletTest {
         servletHandler.addServletWithMapping(new ServletHolder(
                 new MSBotWebHookServlet(new MSBotEventSink() {
                     @Override
-                    public void onMessage(MessageEvent message) {
+                    public void onMessage(Activity activity) {
                     }
                 })), "/ms-bot-events");
         server.start();

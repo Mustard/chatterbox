@@ -1,6 +1,6 @@
 package com.github.mustard.chatterbox.msbot.client;
 
-public interface MSBotAuthSession {
+public interface MSBotAuthTokenProvider {
 
     String getBearerAuthToken();
 

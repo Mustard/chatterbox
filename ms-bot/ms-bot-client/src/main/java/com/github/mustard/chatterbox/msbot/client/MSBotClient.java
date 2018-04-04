@@ -2,8 +2,6 @@ package com.github.mustard.chatterbox.msbot.client;
 
 import com.github.mustard.chatterbox.msbot.domain.*;
 import org.glassfish.jersey.client.JerseyClient;
-import org.glassfish.jersey.client.JerseyClientBuilder;
-import org.glassfish.jersey.jackson.JacksonFeature;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.*;
@@ -16,15 +14,15 @@ public class MSBotClient {
 
     private final JerseyClient jerseyClient;
     private final String apiURL;
-    private final MSBotAuthSession authSession;
+    private final MSBotAuthTokenProvider authSession;
 
-    public MSBotClient(MSBotAuthSession authSession) {
+    public MSBotClient(MSBotAuthTokenProvider authSession) {
         this.authSession = authSession;
         this.jerseyClient = MSBotJerseyClientBuilder.makeClient();
         this.apiURL = DEFAULT_API_URL;
     }
 
-    public MSBotClient(MSBotAuthSession authSession, String apiURL) {
+    public MSBotClient(MSBotAuthTokenProvider authSession, String apiURL) {
         this.authSession = authSession;
         this.jerseyClient = MSBotJerseyClientBuilder.makeClient(); //JerseyClientBuilder.createClient().register(JacksonJsonProvider.class);
         this.apiURL = apiURL;
