@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Set;
 
+// https://tools.ietf.org/html/rfc7517
 public class JSONWebKey {
 
     public final String keyType;
