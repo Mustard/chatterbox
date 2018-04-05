@@ -1,5 +1,7 @@
 package com.github.mustard.chatterbox.msbot.client;
 
+import com.github.mustard.chatterbox.msbot.domain.JSONWebKey;
+import com.github.mustard.chatterbox.msbot.domain.JSONWebKeyContainer;
 import com.github.mustard.chatterbox.msbot.domain.MSAAADAuthenticationResponse;
 import com.github.mustard.chatterbox.msbot.domain.OpenIDConfiguration;
 import org.glassfish.jersey.client.JerseyClient;
@@ -7,10 +9,12 @@ import org.glassfish.jersey.client.JerseyClient;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 public class MSBotAuthClient {
 
-    private static final String DEFAULT_OPENID_CONFIG_URL = "https://login.botframework.com/v1/.well-known/openidconfiguration";
+    public static final String DEFAULT_OPENID_CONFIG_URL = "https://login.botframework.com/v1/.well-known/openidconfiguration";
+    public static final String DEFAULT_OPENID_AUTH_URL = "https://login.microsoftonline.com/botframework.com/oauth2/v2.0/token";
 
     private final JerseyClient jerseyClient;
     private final String openIDConfigURL;
@@ -39,19 +43,27 @@ public class MSBotAuthClient {
                 .post(Entity.form(form), MSAAADAuthenticationResponse.class);
     }
 
-    public OpenIDConfiguration fetchOpenIDConfiguration() {
+    public OpenIdContainer fetchOpenIDConfiguration() {
         OpenIDConfiguration openIDConfiguration = jerseyClient.target(openIDConfigURL)
                 .request(MediaType.APPLICATION_JSON)
                 .get(OpenIDConfiguration.class);
 
-
-        jerseyClient.target(openIDConfiguration.jwksURI)
+        JSONWebKeyContainer jsonWebKeyContainer = jerseyClient.target(openIDConfiguration.jwksURI)
                 .request(MediaType.APPLICATION_JSON)
-                .get(String.class);
+                .get(JSONWebKeyContainer.class);
 
-        // TODO return pair?
-        return openIDConfiguration;
+        return new OpenIdContainer(openIDConfiguration, jsonWebKeyContainer.keys);
 
+    }
+
+    public static class OpenIdContainer {
+        public final OpenIDConfiguration openIDConfiguration;
+        public final List<JSONWebKey> keyList;
+
+        public OpenIdContainer(OpenIDConfiguration openIDConfiguration, List<JSONWebKey> keyList) {
+            this.openIDConfiguration = openIDConfiguration;
+            this.keyList = keyList;
+        }
     }
 
 }

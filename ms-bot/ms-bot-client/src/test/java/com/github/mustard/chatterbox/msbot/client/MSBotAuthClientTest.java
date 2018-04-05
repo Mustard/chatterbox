@@ -26,7 +26,7 @@ class MSBotAuthClientTest {
 
     @BeforeEach
     void setUp() {
-        String wireMockURL = "http://localhost:" + wireMockServer.port();
+        String wireMockURL = "http://localhost:" + wireMockServer.port() + "/v1/.well-known/openidconfiguration";
         this.client = new MSBotAuthClient(wireMockURL);
     }
 
@@ -36,6 +36,24 @@ class MSBotAuthClientTest {
             wireMockServer.stop();
         }
     }
+
+    @Test
+    void shouldRetrieveOpenIdConfiguration() {
+        String jwksURL = "http://localhost:" + wireMockServer.port() + "/v1/.well-known/keys";
+
+        stubFor(get(urlEqualTo("/v1/.well-known/openidconfiguration"))
+            .willReturn(okJson(FixtureHelpers.fixture("fixtures/OpenIdConfigurationResponse.json").replace("{{JWKS_URI}}", jwksURL))));
+
+        stubFor(get(urlEqualTo("/v1/.well-known/keys"))
+            .willReturn(okJson(FixtureHelpers.fixture("fixtures/JSONWebKeysResponse.json"))));
+
+        MSBotAuthClient.OpenIdContainer response = client.fetchOpenIDConfiguration();
+
+        assertEquals(response.openIDConfiguration.authorizationEndpoint, "https://invalid.botframework.com");
+
+        // TODO assertions
+    }
+
 
     @Test
     void shouldAuthenticate() {

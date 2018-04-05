@@ -73,7 +73,7 @@ public class MSBotInMemoryAuthTokenProvider implements MSBotAuthTokenProvider {
             authActionLock.lock();
             try {
                 if (authResponse == null || authResponseExpiry == null || authResponseExpiry.minusMinutes(5).isBefore(now())) {
-                    authResponse = authClient.login(openIDConfiguration.authorizationEndpoint, credentialsProvider);
+                    authResponse = authClient.login(MSBotAuthClient.DEFAULT_OPENID_AUTH_URL, credentialsProvider);
                     authResponseExpiry = now().plusSeconds(authResponse.expiresIn);
                 }
             } finally {
@@ -88,7 +88,8 @@ public class MSBotInMemoryAuthTokenProvider implements MSBotAuthTokenProvider {
             openIdActionLock.lock();
             try {
                 if (openIDConfiguration == null || openIdConfigCachedTime == null || openIdConfigCachedTime.plus(openIdConfigCacheDuration).isBefore(now())) {
-                    this.openIDConfiguration = authClient.fetchOpenIDConfiguration();
+                    MSBotAuthClient.OpenIdContainer openIdContainer = authClient.fetchOpenIDConfiguration();
+                    this.openIDConfiguration = openIdContainer.openIDConfiguration;
                     this.openIdConfigCachedTime = now();
                 }
             } finally {

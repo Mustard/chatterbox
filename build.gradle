@@ -39,6 +39,11 @@ subprojects {
     sourceCompatibility = 1.8
 
     dependencies {
+
+        testCompile group: 'org.assertj',
+                    name: 'assertj-core',
+                    version: "$assertjVersion"
+
         testCompile group: 'org.junit.jupiter',
                     name: 'junit-jupiter-api',
                     version: "$junitVersion"
