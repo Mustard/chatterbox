@@ -45,14 +45,12 @@ public class MSBotClient {
             throw new IllegalStateException("Can only reply to activity events with type = \"message\"");
         }
 
-        ConversationAccount conversationAccount = new ConversationAccount(
-                replyToActivity.conversation.id, replyToActivity.conversation.isGroup, null
-        );
-
         Activity activity = Activity.activityBuilder()
                 .type(MESSAGE)
-                .conversation(conversationAccount)
+                .conversation(replyToActivity.conversation)
                 .replyToId(replyToActivity.id)
+                .from(replyToActivity.recipient)
+                .recipient(replyToActivity.from)
                 .text(text)
                 .textFormat(textFormat)
                 .build();
