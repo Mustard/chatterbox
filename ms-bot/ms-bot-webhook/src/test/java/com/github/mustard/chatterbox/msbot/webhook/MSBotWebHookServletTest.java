@@ -2,6 +2,7 @@ package com.github.mustard.chatterbox.msbot.webhook;
 
 import com.github.mustard.chatterbox.msbot.domain.Activity;
 import com.google.common.io.Resources;
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.StringEntity;
@@ -18,6 +19,7 @@ import java.io.InputStream;
 
 import static com.google.common.base.Charsets.UTF_8;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.apache.http.HttpHeaders.AUTHORIZATION;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -73,6 +75,7 @@ class MSBotWebHookServletTest {
                 Resources.toString(getClass().getResource("/" + jsonFixturePath), UTF_8));
         return Request.Post("http://localhost:" + getPort() + "/ms-bot-events")
                 .setHeader(CONTENT_TYPE, APPLICATION_JSON)
+                .setHeader(AUTHORIZATION, "Bearer \"TODO\"")
                 .body(stringEntity)
                 .execute().returnResponse();
     }
