@@ -149,6 +149,7 @@ project('ms-bot:ms-bot-webhook') {
 
         compile project(':util')
         compile project(':ms-bot:ms-bot-domain')
+        compile project(':ms-bot:ms-bot-client')
 
         compile group: 'org.slf4j',
                 name: 'slf4j-api',
@@ -157,6 +158,10 @@ project('ms-bot:ms-bot-webhook') {
         compile group: 'javax.servlet',
                 name: 'javax.servlet-api',
                 version: "$servletAPIVersion"
+
+        compile group: 'com.auth0',
+                name: 'java-jwt',
+                version: "$jwtVersion"
 
         testCompile group: 'io.dropwizard',
                 name: 'dropwizard-testing',

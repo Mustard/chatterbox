@@ -1,11 +1,11 @@
 package com.github.mustard.chatterbox.msbot.client;
 
-public class MSBotCredentials implements MSBotCredentialsProvider {
+public class MSBotAppAppCredentials implements MSBotAppCredentialsProvider {
 
     private final String appId;
     private final String appPassword;
 
-    public MSBotCredentials(String appId, String appPassword) {
+    public MSBotAppAppCredentials(String appId, String appPassword) {
         this.appId = appId;
         this.appPassword = appPassword;
     }

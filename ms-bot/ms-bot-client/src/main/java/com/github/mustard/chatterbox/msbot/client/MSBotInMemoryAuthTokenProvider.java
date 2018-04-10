@@ -1,34 +1,39 @@
 package com.github.mustard.chatterbox.msbot.client;
 
+import com.github.mustard.chatterbox.msbot.domain.JSONWebKey;
 import com.github.mustard.chatterbox.msbot.domain.MSAAADAuthenticationResponse;
 import com.github.mustard.chatterbox.msbot.domain.OpenIDConfiguration;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static java.time.LocalDateTime.now;
 
-public class MSBotInMemoryAuthTokenProvider implements MSBotAuthTokenProvider {
+public class MSBotInMemoryAuthTokenProvider implements MSBotAuthTokenProvider, MSBotJWTKeyProvider {
+
 
     public enum AuthMode {LAZY, EAGER}
 
     private final MSBotAuthClient authClient;
     private final AuthMode authMode;
-    private final MSBotCredentialsProvider credentialsProvider;
+    private final MSBotAppCredentialsProvider credentialsProvider;
     private final ReentrantLock authActionLock = new ReentrantLock();
 
     private final ReentrantLock openIdActionLock = new ReentrantLock();
     private final Duration openIdConfigCacheDuration;
     private LocalDateTime openIdConfigCachedTime;
     private OpenIDConfiguration openIDConfiguration;
+    private List<JSONWebKey> openIDJWTKeyList;
     private final ExecutorService executorService;
 
     private MSAAADAuthenticationResponse authResponse;
     private LocalDateTime authResponseExpiry;
 
-    public MSBotInMemoryAuthTokenProvider(MSBotAuthClient authClient, MSBotCredentialsProvider credentialsProvider, AuthMode authMode) {
+    public MSBotInMemoryAuthTokenProvider(MSBotAuthClient authClient, MSBotAppCredentialsProvider credentialsProvider, AuthMode authMode) {
         this.authClient = authClient;
         this.credentialsProvider = credentialsProvider;
         this.openIdConfigCacheDuration = Duration.ofDays(5L);
@@ -60,6 +65,22 @@ public class MSBotInMemoryAuthTokenProvider implements MSBotAuthTokenProvider {
         return authResponse.accessToken;
     }
 
+
+    @Override
+    public Optional<JSONWebKey> getKey(String keyId) {
+        getBearerAuthToken(); // TODO this is just to check we have fetched
+
+        openIdActionLock.lock();
+        try {
+            return openIDJWTKeyList.stream()
+                    .filter(jsonWebKey -> keyId.equals(jsonWebKey.keyId))
+                    .findFirst();
+        } finally {
+            openIdActionLock.unlock();
+        }
+    }
+
+
     private Future<?> checkAuthentication() {
         if (openIDConfiguration == null) {
             try {
@@ -90,6 +111,7 @@ public class MSBotInMemoryAuthTokenProvider implements MSBotAuthTokenProvider {
                 if (openIDConfiguration == null || openIdConfigCachedTime == null || openIdConfigCachedTime.plus(openIdConfigCacheDuration).isBefore(now())) {
                     MSBotAuthClient.OpenIdContainer openIdContainer = authClient.fetchOpenIDConfiguration();
                     this.openIDConfiguration = openIdContainer.openIDConfiguration;
+                    this.openIDJWTKeyList = openIdContainer.keyList;
                     this.openIdConfigCachedTime = now();
                 }
             } finally {

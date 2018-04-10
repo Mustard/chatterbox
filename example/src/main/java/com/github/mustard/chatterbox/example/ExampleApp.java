@@ -1,5 +1,6 @@
 package com.github.mustard.chatterbox.example;
 
+import com.github.mustard.chatterbox.msbot.client.*;
 import com.github.mustard.chatterbox.msbot.dropwizard.ChatterboxMSBotBundle;
 import com.github.mustard.chatterbox.slack.dropwizard.ChatterboxSlackBundle;
 import io.dropwizard.Application;
@@ -19,7 +20,16 @@ public class ExampleApp extends Application<Config> {
     @Override
     public void initialize(Bootstrap<Config> bootstrap) {
         bootstrap.addBundle(new ChatterboxSlackBundle(new LoggingSlackEventSink()));
-        bootstrap.addBundle(new ChatterboxMSBotBundle(new LoggingMSBotEventSink()));
+
+
+        MSBotAppAppCredentials credentials = new MSBotAppAppCredentials("app", "password");
+        MSBotAuthClient msBotAuthClient = new MSBotAuthClient();
+        MSBotInMemoryAuthTokenProvider msBotInMemoryAuthTokenProvider = new MSBotInMemoryAuthTokenProvider(msBotAuthClient, credentials, MSBotInMemoryAuthTokenProvider.AuthMode.LAZY);
+        MSBotClient msBotClient = new MSBotClient(msBotInMemoryAuthTokenProvider);
+        MSBotJWTKeyProvider msBotJWTKeyProvider = msBotInMemoryAuthTokenProvider;
+
+        EchoMSBotEventSink echoMSBotEventSink = new EchoMSBotEventSink(msBotClient);
+        bootstrap.addBundle(new ChatterboxMSBotBundle(echoMSBotEventSink, msBotJWTKeyProvider));
     }
 
 }

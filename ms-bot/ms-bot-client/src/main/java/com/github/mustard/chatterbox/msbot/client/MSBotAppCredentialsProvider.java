@@ -1,6 +1,6 @@
 package com.github.mustard.chatterbox.msbot.client;
 
-public interface MSBotCredentialsProvider {
+public interface MSBotAppCredentialsProvider {
 
     String getAppId();
 

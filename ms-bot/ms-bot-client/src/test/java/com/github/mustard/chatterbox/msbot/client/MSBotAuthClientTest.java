@@ -61,7 +61,7 @@ class MSBotAuthClientTest {
                 .willReturn(okJson(FixtureHelpers.fixture("fixtures/SuccessfullAuthenticationResponse.json"))));
 
         String loginURL = "http://localhost:" + wireMockServer.port() + "/botframework.com/oauth2/v2.0/token";
-        MSAAADAuthenticationResponse response = client.login(loginURL, new MSBotCredentials("APP_ID", "PASSWORD"));
+        MSAAADAuthenticationResponse response = client.login(loginURL, new MSBotAppAppCredentials("APP_ID", "PASSWORD"));
 
         // TODO assert request was well formed
         // TODO handle and test auth failer (need to compare to real response)

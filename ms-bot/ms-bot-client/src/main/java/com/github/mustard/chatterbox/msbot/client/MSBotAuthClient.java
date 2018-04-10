@@ -30,7 +30,7 @@ public class MSBotAuthClient {
     }
 
     // https://docs.microsoft.com/en-us/azure/bot-service/rest-api/bot-framework-rest-connector-authentication#step-1-request-an-access-token-from-the-msaaad-v2-login-service
-    public MSAAADAuthenticationResponse login(String url, MSBotCredentialsProvider credentialsProvider) {
+    public MSAAADAuthenticationResponse login(String url, MSBotAppCredentialsProvider credentialsProvider) {
 
         Form form = new Form()
                 .param("grant_type", "client_credentials")
