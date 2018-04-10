@@ -5,8 +5,6 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.RSAKeyProvider;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mustard.chatterbox.msbot.MSBotObjectMapperFactory;
 import com.github.mustard.chatterbox.msbot.client.MSBotJWTKeyProvider;
@@ -55,25 +53,40 @@ public class MSBotWebHookServlet extends HttpServlet {
 
         resp.setContentType("text/plain");
 
+        Optional<DecodedJWT> decodedJWT = authenticateRequest(req, resp);
+
+        if (!decodedJWT.isPresent()) return;
+
+        Activity activity;
+
+        if (LOG.isDebugEnabled()) {
+            String requestBody = IOUtil.toString(req.getInputStream());
+            LOG.debug(requestBody);
+            activity = objectMapper.readValue(requestBody, Activity.class);
+        } else {
+            activity = objectMapper.readValue(req.getInputStream(), Activity.class);
+        }
+
+        eventSink.onMessage(activity);
+
+        resp.setStatus(HTTP_OK);
+    }
+
+    private Optional<DecodedJWT> authenticateRequest(HttpServletRequest req, HttpServletResponse resp) {
         String authHeader = StringUtil.trimToEmpty(req.getHeader("Authorization"));
         String authBearerToken = authHeader.replaceFirst("^Bearer ", "");
 
         if (authHeader.isEmpty()) {
             LOG.warn("No Authorization header in request");
             resp.setStatus(HTTP_FORBIDDEN);
-            return;
+            return Optional.empty();
         }
 
         if (authBearerToken.isEmpty()) {
             LOG.warn("No Authorization Bearer token in request");
             resp.setStatus(HTTP_FORBIDDEN);
-            return;
+            return Optional.empty();
         }
-
-        System.out.println("BEARER TOKEN " + authBearerToken);
-
-//        new JwkStore("{JWKS_FILE_HOST}");
-
 
         DecodedJWT decodedJWT = JWT.decode(authBearerToken);
 
@@ -120,7 +133,7 @@ public class MSBotWebHookServlet extends HttpServlet {
             default:
                 resp.setStatus(HTTP_BAD_REQUEST);
                 LOG.error("Unknown algorithm {}", decodedJWT.getAlgorithm());
-                return;
+                return Optional.empty();
         }
 
         JWTVerifier jwtVerifier = JWT.require(algorithm)
@@ -128,23 +141,7 @@ public class MSBotWebHookServlet extends HttpServlet {
                 .build();
 
         jwtVerifier.verify(authBearerToken);
-
-        System.out.println(decodedJWT);
-
-        Activity activity;
-
-        if (LOG.isDebugEnabled()) {
-            String requestBody = IOUtil.toString(req.getInputStream());
-            LOG.debug(requestBody);
-            activity = objectMapper.readValue(requestBody, Activity.class);
-        } else {
-            activity = objectMapper.readValue(req.getInputStream(), Activity.class);
-        }
-
-//        eventSink.onMessage(new MessageEvent()); // TODO
-        eventSink.onMessage(activity);
-
-        resp.setStatus(HTTP_OK);
+        return Optional.of(decodedJWT);
     }
 
 }
