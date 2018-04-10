@@ -7,6 +7,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.RSAKeyProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.mustard.chatterbox.msbot.MSBotObjectMapperFactory;
+import com.github.mustard.chatterbox.msbot.client.MSBotAppAppCredentials;
 import com.github.mustard.chatterbox.msbot.client.MSBotJWTKeyProvider;
 import com.github.mustard.chatterbox.msbot.domain.Activity;
 import com.github.mustard.chatterbox.msbot.domain.JSONWebKey;
@@ -138,6 +139,8 @@ public class MSBotWebHookServlet extends HttpServlet {
 
         JWTVerifier jwtVerifier = JWT.require(algorithm)
                 .acceptLeeway(Duration.ofMinutes(5).getSeconds())
+                .withIssuer("https://api.botframework.com")
+                // .withAudience(ap) TODO verify audience if the app id
                 .build();
 
         jwtVerifier.verify(authBearerToken);
