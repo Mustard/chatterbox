@@ -1,5 +1,6 @@
 package com.github.mustard.chatterbox.example;
 
+import com.github.mustard.chatterbox.example.config.Config;
 import com.github.mustard.chatterbox.msbot.client.*;
 import com.github.mustard.chatterbox.msbot.dropwizard.ChatterboxMSBotBundle;
 import com.github.mustard.chatterbox.slack.dropwizard.ChatterboxSlackBundle;
@@ -26,10 +27,9 @@ public class ExampleApp extends Application<Config> {
         MSBotAuthClient msBotAuthClient = new MSBotAuthClient();
         MSBotInMemoryAuthTokenProvider msBotInMemoryAuthTokenProvider = new MSBotInMemoryAuthTokenProvider(msBotAuthClient, credentials, MSBotInMemoryAuthTokenProvider.AuthMode.LAZY);
         MSBotClient msBotClient = new MSBotClient(msBotInMemoryAuthTokenProvider);
-        MSBotJWTKeyProvider msBotJWTKeyProvider = msBotInMemoryAuthTokenProvider;
 
         EchoMSBotEventSink echoMSBotEventSink = new EchoMSBotEventSink(msBotClient);
-        bootstrap.addBundle(new ChatterboxMSBotBundle(echoMSBotEventSink, msBotJWTKeyProvider));
+        bootstrap.addBundle(new ChatterboxMSBotBundle(echoMSBotEventSink, msBotInMemoryAuthTokenProvider));
     }
 
 }

@@ -43,3 +43,11 @@ logging:
 #      archivedFileCount: 7
 #      timeZone: UTC
 #      maxFileSize: 10MB
+
+
+chat:
+  msBot:
+    appId: app-id
+    password: password
+
+  slack:
