@@ -292,6 +292,7 @@ project('example') {
 }
 
 configure([
+        project(':util'),
         project(':ms-bot:ms-bot-webhook'),
         project(':slack:slack-domain'),
         project(':slack:slack-webhook'),
@@ -322,5 +323,5 @@ configure([
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.3.1'
+    gradleVersion = '4.7'
 }
